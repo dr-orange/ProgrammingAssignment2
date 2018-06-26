@@ -9,14 +9,23 @@
 # 4. get the value of the inverse
 
 makeCacheMatrix <- function(x = matrix()) {
+        # define the cache s
         s <- NULL
+        # setter matrix
         set <- function(y) {
+                # assign the matrix y to x in the parent env.
                 x <<- y
+                # initialize s in the parent env.
                 s <<- NULL
         }
+        # getter matrix
         get <- function() x
+        # setter inverse
+        # assign the inverse to cache s
         setsolve <- function(solve) s <<- solve
+        # getter inverse
         getsolve <- function() s
+        # assign value labels to access these from outside of function
         list(set = set, get = get,
              setsolve = setsolve,
              getsolve = getsolve)
@@ -31,12 +40,18 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
         s <- x$getsolve()
+        # if the inverse has already been calculated?
         if(!is.null(s)) {
+                # then retrieve inverse from the cache
                 message("getting cached data")
                 return(s)
         }
+        # the inverse has not been calculated yet, retrieve the matrix
+        # that have reference to the parent environment
         data <- x$get()
+        # calculate the inverse
         s <- solve(data, ...)
+        # set the inverse to cache
         x$setsolve(s)
         s
 }
